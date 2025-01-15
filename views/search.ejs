@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>البحث عن القنوات</title>
+</head>
+<body>
+  <h1>البحث عن رابط قناة</h1>
+  <form method="POST" action="/search">
+    <label for="channelName">اسم القناة:</label>
+    <input type="text" id="channelName" name="channelName" required>
+    <button type="submit">بحث</button>
+  </form>
+
+  <% if (typeof error !== "undefined" && error) { %>
+    <p style="color: red;"><%= error %></p>
+  <% } %>
+
+  <% if (query) { %>
+    <h2>نتائج البحث عن: "<%= query %>"</h2>
+    <% if (result) { %>
+      <p>اسم القناة: <%= result.name %></p>
+      <p>رابط القناة: <a href="<%= result.url %>" target="_blank"><%= result.url %></a></p>
+    <% } else { %>
+      <p>لم يتم العثور على القناة.</p>
+    <% } %>
+  <% } %>
+</body>
+</html>
