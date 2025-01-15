@@ -167,7 +167,7 @@ function readmoaalikLinks() {
         const channelMap = {};
 
         channels.forEach(channel => {
-            console.log(`Processing channel: ${channel.name}`); // طباعة اسم القناة
+          
             channelMap[channel.name.trim()] = channel.url.trim();
         });
         return channelMap;
