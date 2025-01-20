@@ -17,95 +17,85 @@ offlineMessage.style.cssText = `
 offlineMessage.textContent = "لا يتوفر اتصال بالإنترنت. يرجى التحقق من الشبكة الخاصة بك.";
 document.body.appendChild(offlineMessage);
 
+// دالة فحص الإنترنت
+function checkInternetBeforeNavigate(url, event) {
+ if (!navigator.onLine) {
+  if (event) {
+   event.preventDefault();
+  }
+  offlineMessage.style.display = 'block';
+  setTimeout(() => {
+   offlineMessage.style.display = 'none';
+  }, 3000);
+  return false;
+ }
+ return true;
+}
+
 // حماية الروابط
 function protectLinks() {
-    // حماية الروابط الموجودة
-    document.querySelectorAll('a').forEach(link => {
-        if (!link.hasAttribute('data-protected')) {
-            const originalHref = link.getAttribute('href');
-            link.setAttribute('data-original-href', originalHref);
-            link.setAttribute('data-protected', 'true');
-            
-            // استبدال الرابط الأصلي بـ JavaScript handler
-            link.setAttribute('href', 'javascript:void(0)');
-            
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (navigator.onLine) {
-                    const href = this.getAttribute('data-original-href');
-                    if (href) {
-                        // فتح الرابط في نفس النافذة
-                        window.location.href = href;
-                    }
-                } else {
-                    offlineMessage.style.display = 'block';
-                    setTimeout(() => {
-                        offlineMessage.style.display = 'none';
-                    }, 3000);
-                }
-            });
-        }
-    });
+ document.querySelectorAll('a').forEach(link => {
+  if (!link.hasAttribute('data-protected')) {
+   link.setAttribute('data-protected', 'true');
+
+   // إضافة مستمع حدث للنقر
+   link.addEventListener('click', function (e) {
+    return checkInternetBeforeNavigate(this.href, e);
+   });
+  }
+ });
 }
 
 // مراقبة حالة الاتصال
 function checkInternetConnection() {
-    if (!navigator.onLine) {
-        offlineMessage.style.display = 'block';
-        setTimeout(() => {
-            offlineMessage.style.display = 'none';
-        }, 3000);
-    } else {
-        offlineMessage.style.display = 'none';
-    }
+ if (!navigator.onLine) {
+  offlineMessage.style.display = 'block';
+  setTimeout(() => {
+   offlineMessage.style.display = 'none';
+  }, 3000);
+ } else {
+  offlineMessage.style.display = 'none';
+ }
 }
 
-// تطبيق الحماية على الروابط الجديدة
+// مراقبة التغييرات في DOM للروابط الجديدة
 const observer = new MutationObserver((mutations) => {
-    mutations.forEach(mutation => {
-        if (mutation.addedNodes.length) {
-            protectLinks();
-        }
-    });
+ mutations.forEach(mutation => {
+  if (mutation.addedNodes.length) {
+   protectLinks();
+  }
+ });
 });
 
-// بدء مراقبة التغييرات في DOM
+// بدء مراقبة التغييرات
 observer.observe(document.body, {
-    childList: true,
-    subtree: true
+ childList: true,
+ subtree: true
 });
 
 // إعداد مراقبي حالة الاتصال
 window.addEventListener('online', checkInternetConnection);
 window.addEventListener('offline', checkInternetConnection);
 
-// التطبيق الأولي عند تحميل الصفحة
+// التطبيق الأولي
 document.addEventListener('DOMContentLoaded', () => {
-    protectLinks();
-    checkInternetConnection();
+ protectLinks();
+ checkInternetConnection();
 });
 
-// إعادة تطبيق الحماية بعد تحميل AJAX
-document.addEventListener('load', () => {
-    protectLinks();
+// التطبيق بعد تحميل AJAX
+window.addEventListener('load', () => {
+ protectLinks();
 });
 
-// معالجة النقر على أي عنصر في الصفحة
-document.addEventListener('click', (e) => {
-    if (!navigator.onLine) {
-        // التحقق مما إذا كان العنصر المنقور عليه أو أحد آبائه رابطاً
-        let element = e.target;
-        while (element) {
-            if (element.tagName === 'A') {
-                e.preventDefault();
-                e.stopPropagation();
-                offlineMessage.style.display = 'block';
-                setTimeout(() => {
-                    offlineMessage.style.display = 'none';
-                }, 3000);
-                return false;
-            }
-            element = element.parentElement;
-        }
-    }
-}, true);
+// اعتراض عمليات التنقل
+window.addEventListener('beforeunload', function (e) {
+ if (!navigator.onLine) {
+  e.preventDefault();
+  offlineMessage.style.display = 'block';
+  setTimeout(() => {
+   offlineMessage.style.display = 'none';
+  }, 3000);
+  return false;
+ }
+});
