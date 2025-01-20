@@ -18,19 +18,17 @@ document.body.appendChild(offlineMessage);
 
 // دالة للتحقق من حالة الاتصال
 function checkInternetConnection() {
-    if (!navigator.onLine) {
-        offlineMessage.style.display = 'block';
-        // تخزين URL الحالي للرجوع إليه عند عودة الاتصال
-        sessionStorage.setItem('lastPage', window.location.href);
-    } else {
-        offlineMessage.style.display = 'none';
-        // التحقق إذا كان هناك صفحة سابقة للرجوع إليها
-        const lastPage = sessionStorage.getItem('lastPage');
-        if (lastPage) {
-            sessionStorage.removeItem('lastPage');
-            window.location.href = lastPage;
-        }
-    }
+ if (!navigator.onLine) {
+  offlineMessage.style.display = 'block';
+  // تخزين URL الحالي للرجوع إليه عند عودة الاتصال
+ } else {
+  offlineMessage.style.display = 'none';
+  // التحقق إذا كان هناك صفحة سابقة للرجوع إليها
+  const lastPage = window.location.href;
+  if (lastPage) {
+   window.location.href = lastPage;
+  }
+ }
 }
 
 // مراقبة حالة الاتصال
