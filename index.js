@@ -234,7 +234,7 @@ app.get("/", async (req, res) => {
     // تحديث الوقت بإنقاص ساعتين
     if (match.time) {
      const matchTime = moment(match.time, "HH:mm"); // افترض أن الوقت بصيغة HH:mm
-     match.time = matchTime.subtract(2, "hours").format("HH:mm");
+     match.time = matchTime.subtract(1, "hours").format("HH:mm");
     }
 
     return match;
@@ -247,7 +247,7 @@ app.get("/", async (req, res) => {
    matches = matches.map(match => {
     if (match.time) {
      const matchTime = moment(match.time, "HH:mm");
-     match.time = matchTime.subtract(2, "hours").format("HH:mm");
+     match.time = matchTime.subtract(1, "hours").format("HH:mm");
     }
     return match;
    });
