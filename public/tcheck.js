@@ -1,14 +1,41 @@
-function checkInternetBeforeLoading() {
-                if (navigator.onLine) {
-                    // إذا كان الاتصال بالإنترنت متاحًا، تحميل الصفحة بشكل طبيعي
-                    window.location.reload(); // يمكن استبدال هذا بتطبيق أي كود تحميل آخر
-                } else {
-                    // إذا لم يكن هناك اتصال بالإنترنت، إظهار رسالة تنبيه
-                    alert(
-                        "لا يتوفر اتصال بالإنترنت. يرجى التحقق من الشبكة الخاصة بك."
-                    );
-                }
-            }
+// إنشاء عنصر div لعرض رسالة عدم الاتصال
+const offlineMessage = document.createElement('div');
+offlineMessage.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #ff4444;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.2rem;
+    z-index: 9999;
+    display: none;
+`;
+offlineMessage.textContent = "لا يتوفر اتصال بالإنترنت. يرجى التحقق من الشبكة الخاصة بك.";
+document.body.appendChild(offlineMessage);
 
-            // التأكد من الاتصال بالإنترنت عند تحميل الصفحة
-            window.addEventListener("load", checkInternetBeforeLoading);
+// دالة للتحقق من حالة الاتصال
+function checkInternetConnection() {
+    if (!navigator.onLine) {
+        offlineMessage.style.display = 'block';
+        // تخزين URL الحالي للرجوع إليه عند عودة الاتصال
+        sessionStorage.setItem('lastPage', window.location.href);
+    } else {
+        offlineMessage.style.display = 'none';
+        // التحقق إذا كان هناك صفحة سابقة للرجوع إليها
+        const lastPage = sessionStorage.getItem('lastPage');
+        if (lastPage) {
+            sessionStorage.removeItem('lastPage');
+            window.location.href = lastPage;
+        }
+    }
+}
+
+// مراقبة حالة الاتصال
+window.addEventListener('online', checkInternetConnection);
+window.addEventListener('offline', checkInternetConnection);
+
+// التحقق من حالة الاتصال عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', checkInternetConnection);
