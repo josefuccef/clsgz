@@ -16,19 +16,24 @@ offlineMessage.style.cssText = `
 offlineMessage.textContent = "لا يتوفر اتصال بالإنترنت. يرجى التحقق من الشبكة الخاصة بك.";
 document.body.appendChild(offlineMessage);
 
+let wasOffline = false; // متغير لتتبع حالة الاتصال السابقة
+
 // دالة للتحقق من حالة الاتصال
 function checkInternetConnection() {
- if (!navigator.onLine) {
-  offlineMessage.style.display = 'block';
-  // تخزين URL الحالي للرجوع إليه عند عودة الاتصال
- } else {
-  offlineMessage.style.display = 'none';
-  // التحقق إذا كان هناك صفحة سابقة للرجوع إليها
-  const lastPage = window.location.href;
-  if (lastPage) {
-   window.location.href = lastPage;
-  }
- }
+    if (!navigator.onLine) {
+        offlineMessage.style.display = 'block';
+        wasOffline = true;
+    } else {
+        offlineMessage.style.display = 'none';
+        if (wasOffline) {
+            // التأكد من أننا في نفس النافذة الأصلية
+            if (window.self === window.top) {
+                // إعادة تحميل الصفحة الحالية في نفس النافذة
+                window.location.reload();
+            }
+            wasOffline = false;
+        }
+    }
 }
 
 // مراقبة حالة الاتصال
@@ -37,3 +42,9 @@ window.addEventListener('offline', checkInternetConnection);
 
 // التحقق من حالة الاتصال عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', checkInternetConnection);
+
+// إضافة مراقب للتأكد من أن الصفحة محملة بشكل كامل
+window.addEventListener('load', () => {
+    // التحقق من حالة الاتصال مرة أخرى بعد اكتمال تحميل الصفحة
+    checkInternetConnection();
+});
