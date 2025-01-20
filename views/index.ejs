@@ -84,27 +84,68 @@
     let close = document.querySelector(".close");
 
     function openInXPolaPlayer(videoUrl) {
-      if (!videoUrl || videoUrl == "رابط غير متوفر") {
-        // عرض رسالة أو إشعار إذا لم يتم تقديم رابط فيديو
-        card.style.display = "block";
-        return;
-      }
-    
-      // إعداد عنوان النية لفتح XPola
-      const packageName = "org.videolan.vlc"; // استبدل باسم الحزمة الصحيح لـ XPola
-      const fallbackUrl = "https://play.google.com/store/apps/details?id=" + packageName;
-      const intentUrl = `intent:${videoUrl}#Intent;package=${packageName};type=video/*;end`;
-
-      // التحقق من دعم المتصفح لـ 'intent:'
-      if (typeof window.location !== "undefined" && intentUrl.startsWith("intent:")) {
-        // إعادة التوجيه إلى النية لفتح المشغل
-        window.location.href = intentUrl;
-      } else {
-        // إذا لم يكن مدعوماً، إعادة التوجيه إلى Google Play
-        window.location.href = fallbackUrl;
-      }
+  if (!videoUrl || videoUrl === "رابط غير متوفر") {
+    // عرض رسالة إذا لم يتم تقديم رابط فيديو
+    let card = document.querySelector(".card");
+    if (card) {
+      card.style.display = "block";
     }
+    return;
+  }
 
+  // إعداد الروابط
+  const packageName = "com.xpola.player"; // استبدل باسم الحزمة الصحيح
+  const fallbackUrl = `https://play.google.com/store/apps/details?id=${packageName}`;
+  const intentUrl = `intent:${videoUrl}#Intent;package=${packageName};type=video/*;end`;
+
+  // محاولة فتح التطبيق باستخدام iframe
+  const iframe = document.createElement("iframe");
+  iframe.style.display = "none";
+  iframe.src = intentUrl;
+  document.body.appendChild(iframe);
+
+  // متغيرات للتحكم
+  let opened = false;
+  let timeout;
+
+  // وظيفة إنهاء المحاولة وتنظيف الموارد
+  const cleanup = () => {
+    if (timeout) clearTimeout(timeout); // إلغاء العد التنازلي
+    if (iframe) document.body.removeChild(iframe); // تنظيف iframe
+    window.removeEventListener("visibilitychange", visibilityHandler); // إزالة المستمع
+  };
+
+  // التحقق من تغييرات الرؤية (المستخدم غادر التطبيق أو النافذة)
+  const visibilityHandler = () => {
+    if (document.visibilityState === "hidden") {
+      opened = true; // المستخدم غادر التطبيق
+      cleanup(); // تنظيف
+    }
+  };
+
+  // إضافة مستمع لتغير حالة الرؤية
+  window.addEventListener("visibilitychange", visibilityHandler);
+
+  // بدء عداد زمني لتوجيه المستخدم إلى Google Play إذا لم يتم فتح التطبيق
+  timeout = setTimeout(() => {
+    if (!opened) {
+      window.location.href = fallbackUrl; // توجيه إلى Google Play
+    }
+    cleanup(); // تنظيف بعد انتهاء المهلة
+  }, 1000);
+}
+
+// إغلاق البطاقة إذا لم يتم إدخال رابط
+document.querySelector(".close").onclick = function () {
+  let card = document.querySelector(".card");
+  if (card) card.style.display = "none";
+};
+
+// إغلاق البطاقة إذا لم يتم إدخال رابط
+document.querySelector(".close").onclick = function () {
+  let card = document.querySelector(".card");
+  if (card) card.style.display = "none";
+};
     // إغلاق البطاقة إذا لم يتم إدخال رابط
     close.onclick = function () {
       card.style.display = "none";
