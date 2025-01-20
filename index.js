@@ -308,7 +308,6 @@ app.get("/edit", (req, res) => {
  const matches = readDataFromFile("matches.json");
  res.render("edit", { matches });
 });
-
 // مسح البيانات
 app.get("/clear", (req, res) => {
  writeDataToFile("matches.json", []);
@@ -318,6 +317,14 @@ app.get("/clear", (req, res) => {
 
 app.get("/login", (req, res) => {
  res.render("singup")
+})
+
+app.get("/menu", (req, res) => {
+ res.render("menu")
+})
+
+app.get("/arab", (req, res) => {
+ res.render("canalArab")
 })
 
 // إعادة جلب البيانات
