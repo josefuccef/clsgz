@@ -12,39 +12,100 @@ offlineMessage.style.cssText = `
     font-size: 1.2rem;
     z-index: 9999;
     display: none;
+    direction: rtl;
 `;
 offlineMessage.textContent = "لا يتوفر اتصال بالإنترنت. يرجى التحقق من الشبكة الخاصة بك.";
 document.body.appendChild(offlineMessage);
 
-let wasOffline = false; // متغير لتتبع حالة الاتصال السابقة
-
-// دالة للتحقق من حالة الاتصال
-function checkInternetConnection() {
-    if (!navigator.onLine) {
-        offlineMessage.style.display = 'block';
-        wasOffline = true;
-    } else {
-        offlineMessage.style.display = 'none';
-        if (wasOffline) {
-            // التأكد من أننا في نفس النافذة الأصلية
-            if (window.self === window.top) {
-                // إعادة تحميل الصفحة الحالية في نفس النافذة
-                window.location.reload();
-            }
-            wasOffline = false;
+// حماية الروابط
+function protectLinks() {
+    // حماية الروابط الموجودة
+    document.querySelectorAll('a').forEach(link => {
+        if (!link.hasAttribute('data-protected')) {
+            const originalHref = link.getAttribute('href');
+            link.setAttribute('data-original-href', originalHref);
+            link.setAttribute('data-protected', 'true');
+            
+            // استبدال الرابط الأصلي بـ JavaScript handler
+            link.setAttribute('href', 'javascript:void(0)');
+            
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (navigator.onLine) {
+                    const href = this.getAttribute('data-original-href');
+                    if (href) {
+                        // فتح الرابط في نفس النافذة
+                        window.location.href = href;
+                    }
+                } else {
+                    offlineMessage.style.display = 'block';
+                    setTimeout(() => {
+                        offlineMessage.style.display = 'none';
+                    }, 3000);
+                }
+            });
         }
-    }
+    });
 }
 
 // مراقبة حالة الاتصال
+function checkInternetConnection() {
+    if (!navigator.onLine) {
+        offlineMessage.style.display = 'block';
+        setTimeout(() => {
+            offlineMessage.style.display = 'none';
+        }, 3000);
+    } else {
+        offlineMessage.style.display = 'none';
+    }
+}
+
+// تطبيق الحماية على الروابط الجديدة
+const observer = new MutationObserver((mutations) => {
+    mutations.forEach(mutation => {
+        if (mutation.addedNodes.length) {
+            protectLinks();
+        }
+    });
+});
+
+// بدء مراقبة التغييرات في DOM
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+
+// إعداد مراقبي حالة الاتصال
 window.addEventListener('online', checkInternetConnection);
 window.addEventListener('offline', checkInternetConnection);
 
-// التحقق من حالة الاتصال عند تحميل الصفحة
-document.addEventListener('DOMContentLoaded', checkInternetConnection);
-
-// إضافة مراقب للتأكد من أن الصفحة محملة بشكل كامل
-window.addEventListener('load', () => {
-    // التحقق من حالة الاتصال مرة أخرى بعد اكتمال تحميل الصفحة
+// التطبيق الأولي عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    protectLinks();
     checkInternetConnection();
 });
+
+// إعادة تطبيق الحماية بعد تحميل AJAX
+document.addEventListener('load', () => {
+    protectLinks();
+});
+
+// معالجة النقر على أي عنصر في الصفحة
+document.addEventListener('click', (e) => {
+    if (!navigator.onLine) {
+        // التحقق مما إذا كان العنصر المنقور عليه أو أحد آبائه رابطاً
+        let element = e.target;
+        while (element) {
+            if (element.tagName === 'A') {
+                e.preventDefault();
+                e.stopPropagation();
+                offlineMessage.style.display = 'block';
+                setTimeout(() => {
+                    offlineMessage.style.display = 'none';
+                }, 3000);
+                return false;
+            }
+            element = element.parentElement;
+        }
+    }
+}, true);
