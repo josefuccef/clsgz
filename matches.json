@@ -1,35 +1,13 @@
 [
   {
-    "team1": "الاتفاق",
-    "logo1": "https://www.kooralive-new.com/wp-content/uploads/2024/11/182.png",
-    "team2": "الأهلي السعودي",
-    "logo2": "https://www.kooralive-new.com/wp-content/uploads/2024/11/270.png",
-    "time": "19:00",
-    "status": "جارية الان",
-    "moaalik": "SSC SPORT 1",
-    "competition": "الدوري السعودي للمحترفين",
-    "link": "رابط غير متوفر"
-  },
-  {
     "team1": "كومو",
     "logo1": "https://www.kooralive-new.com/wp-content/uploads/2024/11/132.png",
     "team2": "أودينيزي",
     "logo2": "https://www.kooralive-new.com/wp-content/uploads/2024/11/145.png",
     "time": "21:45",
-    "status": "لم تبدأ بعد",
+    "status": "جارية الان",
     "moaalik": "أبو ظبي الرياضية بريميوم 1",
     "competition": "الدوري الإيطالي",
-    "link": "رابط غير متوفر"
-  },
-  {
-    "team1": "فياريال",
-    "logo1": "https://www.kooralive-new.com/wp-content/uploads/2024/11/127.png",
-    "team2": "ريال مايوركا",
-    "logo2": "https://www.kooralive-new.com/wp-content/uploads/2024/12/121.png",
-    "time": "22:00",
-    "status": "لم تبدأ بعد",
-    "moaalik": "BEIN SPORTS 3 HD",
-    "competition": "الدوري الإسباني",
     "link": "رابط غير متوفر"
   },
   {
@@ -38,9 +16,31 @@
     "team2": "ولفرهامبتون",
     "logo2": "https://www.kooralive-new.com/wp-content/uploads/2024/12/1028.png",
     "time": "22:00",
-    "status": "لم تبدأ بعد",
+    "status": "جارية الان",
     "moaalik": "BEIN SPORTS 1 HD",
     "competition": "الدوري الإنجليزي الممتاز",
+    "link": "رابط غير متوفر"
+  },
+  {
+    "team1": "فياريال",
+    "logo1": "https://www.kooralive-new.com/wp-content/uploads/2024/11/127.png",
+    "team2": "ريال مايوركا",
+    "logo2": "https://www.kooralive-new.com/wp-content/uploads/2024/12/121.png",
+    "time": "22:00",
+    "status": "جارية الان",
+    "moaalik": "BEIN SPORTS 3 HD",
+    "competition": "الدوري الإسباني",
+    "link": "رابط غير متوفر"
+  },
+  {
+    "team1": "الاتفاق",
+    "logo1": "https://www.kooralive-new.com/wp-content/uploads/2024/11/182.png",
+    "team2": "الأهلي السعودي",
+    "logo2": "https://www.kooralive-new.com/wp-content/uploads/2024/11/270.png",
+    "time": "19:00",
+    "status": "انتهت",
+    "moaalik": "SSC SPORT 1",
+    "competition": "الدوري السعودي للمحترفين",
     "link": "رابط غير متوفر"
   }
 ]

@@ -198,6 +198,17 @@ app.get("/reload", async (req, res) => {
  res.redirect("edit"); // إعادة توجيه للصفحة الرئيسية
 });
 
+// تحديث المباريات عند الإرسال
+app.post("/update", (req, res) => {
+ const updatedMatches = req.body.matches;
+
+ if (Array.isArray(updatedMatches)) {
+  writeDataToFile("matches.json", updatedMatches); // حفظ التحديثات في ملف matches.json
+  res.redirect("/"); // إعادة توجيه للصفحة الرئيسية
+ } else {
+  res.status(400).send("البيانات غير صحيحة.");
+ }
+});
 
 // الصفحة الرئيسية
 
@@ -223,7 +234,7 @@ app.get("/", async (req, res) => {
     // تحديث الوقت بإنقاص ساعتين
     if (match.time) {
      const matchTime = moment(match.time, "HH:mm"); // افترض أن الوقت بصيغة HH:mm
-     match.time = matchTime.subtract(0, "hours").format("HH:mm");
+     match.time = matchTime.subtract(1, "hours").format("HH:mm");
     }
 
     return match;
@@ -236,7 +247,7 @@ app.get("/", async (req, res) => {
    matches = matches.map(match => {
     if (match.time) {
      const matchTime = moment(match.time, "HH:mm");
-     match.time = matchTime.subtract(0, "hours").format("HH:mm");
+     match.time = matchTime.subtract(1, "hours").format("HH:mm");
     }
     return match;
    });
@@ -297,20 +308,6 @@ app.get("/edit", (req, res) => {
  const matches = readDataFromFile("matches.json");
  res.render("edit", { matches });
 });
-
-
-// تحديث المباريات عند الإرسال
-app.post("/update", (req, res) => {
- const updatedMatches = req.body.matches;
-
- if (Array.isArray(updatedMatches)) {
-  writeDataToFile("matches.json", updatedMatches); // حفظ التحديثات في ملف matches.json
-  res.redirect("/"); // إعادة توجيه للصفحة الرئيسية
- } else {
-  res.status(400).send("البيانات غير صحيحة.");
- }
-});
-
 // مسح البيانات
 app.get("/clear", (req, res) => {
  writeDataToFile("matches.json", []);
