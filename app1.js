@@ -99,7 +99,7 @@ fetchChannels();
 // دالة لقراءة روابط القنوات من ملف canalSport.json
 function readChannelsFromFile() {
  try {
-  const filePath = path.join(__dirname, "Channels.json");
+  const filePath = path.join(__dirname, "Sport.json");
   const data = fs.readFileSync(filePath, "utf-8");
   return JSON.parse(data); // إرجاع القنوات المقروءة من الملف
  } catch (error) {
@@ -234,7 +234,7 @@ app.get("/", async (req, res) => {
     // تحديث الوقت بإنقاص ساعتين
     if (match.time) {
      const matchTime = moment(match.time, "HH:mm"); // افترض أن الوقت بصيغة HH:mm
-     match.time = matchTime.subtract(2, "hours").format("HH:mm");
+     match.time = matchTime.subtract(1, "hours").format("HH:mm");
     }
 
     return match;
@@ -247,7 +247,7 @@ app.get("/", async (req, res) => {
    matches = matches.map(match => {
     if (match.time) {
      const matchTime = moment(match.time, "HH:mm");
-     match.time = matchTime.subtract(2, "hours").format("HH:mm");
+     match.time = matchTime.subtract(1, "hours").format("HH:mm");
     }
     return match;
    });
@@ -308,13 +308,24 @@ app.get("/edit", (req, res) => {
  const matches = readDataFromFile("matches.json");
  res.render("edit", { matches });
 });
-
 // مسح البيانات
 app.get("/clear", (req, res) => {
  writeDataToFile("matches.json", []);
  writeDataToFile("canalSport.json", []);
  res.redirect("/edit");
 });
+
+app.get("/login", (req, res) => {
+ res.render("singup")
+})
+
+app.get("/menu", (req, res) => {
+ res.render("menu")
+})
+
+app.get("/arab", (req, res) => {
+ res.render("canalArab")
+})
 
 // إعادة جلب البيانات
 function readChannels() {
