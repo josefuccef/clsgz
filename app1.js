@@ -219,7 +219,6 @@ app.get("/", async (req, res) => {
 
   // تحديث أو جلب المباريات
   if (matches && matches.length > 0) {
-   // إذا كانت البيانات موجودة، فقط حدث الحالات والأوقات
    const updatedMatches = await fetchMatches(); // جلب البيانات المحدثة من المصدر
 
    matches = matches.map(match => {
@@ -243,7 +242,6 @@ app.get("/", async (req, res) => {
    // إذا لم تكن هناك بيانات، يتم جلبها من المصدر
    matches = await fetchMatches();
 
-   // تحديث الوقت بإنقاص ساعتين وترتيب المباريات
    matches = matches.map(match => {
     if (match.time) {
      const matchTime = moment(match.time, "HH:mm");
@@ -260,7 +258,6 @@ app.get("/", async (req, res) => {
      "انتهت": 2        // الأولوية الأقل
     };
 
-    // مقارنة الحالات أولاً
     const statusA = statusOrder[a.status] ?? 3; // إذا كانت الحالة غير معروفة
     const statusB = statusOrder[b.status] ?? 3;
 
@@ -268,7 +265,6 @@ app.get("/", async (req, res) => {
      return statusA - statusB;
     }
 
-    // إذا كانت الحالة متساوية، نرتب حسب الوقت
     const timeA = moment(a.time, "HH:mm");
     const timeB = moment(b.time, "HH:mm");
     return timeA - timeB;
@@ -278,7 +274,6 @@ app.get("/", async (req, res) => {
   // قراءة القنوات من الملف
   let channels = readDataFromFile("Sport.json");
 
-  // إذا لم تكن هناك بيانات قنوات، يتم جلبها من المصدر
   if (!channels || channels.length === 0) {
    await fetchChannels(); // جلب القنوات
    channels = readDataFromFile("Sport.json"); // إعادة قراءة البيانات بعد الجلب
@@ -325,6 +320,10 @@ app.get("/menu", (req, res) => {
 
 app.get("/arab", (req, res) => {
  res.render("canalArab")
+})
+
+app.get("/maroc", (req, res) => {
+ res.render("maroc")
 })
 
 // إعادة جلب البيانات
@@ -408,3 +407,5 @@ const PORT = 3000;
 app.listen(PORT, () => {
  console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+
