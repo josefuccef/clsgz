@@ -99,7 +99,7 @@ fetchChannels();
 // دالة لقراءة روابط القنوات من ملف canalSport.json
 function readChannelsFromFile() {
  try {
-  const filePath = path.join(__dirname, "Sport.json");
+  const filePath = path.join(__dirname, "Channels.json");
   const data = fs.readFileSync(filePath, "utf-8");
   return JSON.parse(data); // إرجاع القنوات المقروءة من الملف
  } catch (error) {
@@ -316,6 +316,7 @@ app.get("/clear", (req, res) => {
  res.redirect("/edit");
 });
 
+<<<<<<< HEAD
 app.get("/login", (req, res) => {
  res.render("singup")
 })
@@ -332,6 +333,8 @@ app.get("/maroc", (req, res) => {
  res.render("maroc")
 })
 
+=======
+>>>>>>> e70137ba5996990346206330140b9f61aee5e43d
 // إعادة جلب البيانات
 function readChannels() {
  try {
