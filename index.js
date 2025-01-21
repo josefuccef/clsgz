@@ -213,89 +213,89 @@ app.post("/update", (req, res) => {
 // الصفحة الرئيسية
 
 app.get("/", async (req, res) => {
-  try {
-    // قراءة المباريات من الملف
-    let matches = readDataFromFile("matches.json");
+ try {
+  // قراءة المباريات من الملف
+  let matches = readDataFromFile("matches.json");
 
-    // تحديث أو جلب المباريات
-    if (matches && matches.length > 0) {
-      const updatedMatches = await fetchMatches(); // جلب البيانات المحدثة من المصدر
+  // تحديث أو جلب المباريات
+  if (matches && matches.length > 0) {
+   const updatedMatches = await fetchMatches(); // جلب البيانات المحدثة من المصدر
 
-      matches = matches.map(match => {
-        // تحديث الحالة بناءً على المصدر
-        const updatedMatch = updatedMatches.find(
-          m => m.team1 === match.team1 && m.team2 === match.team2
-        );
-        if (updatedMatch) {
-          match.status = updatedMatch.status; // تحديث الحالة فقط
-        }
-
-        // تحديث الوقت بإنقاص ساعتين
-        if (match.time) {
-          const matchTime = moment(match.time, "HH:mm"); // افترض أن الوقت بصيغة HH:mm
-          match.time = matchTime.subtract(1, "hours").format("HH:mm");
-        }
-
-        return match;
-      });
-    } else {
-      // إذا لم تكن هناك بيانات، يتم جلبها من المصدر
-      matches = await fetchMatches();
-
-      matches = matches.map(match => {
-        if (match.time) {
-          const matchTime = moment(match.time, "HH:mm");
-          match.time = matchTime.subtract(1, "hours").format("HH:mm");
-        }
-        return match;
-      });
-
-      // ترتيب المباريات حسب الحالة والوقت
-      matches.sort((a, b) => {
-        const statusOrder = {
-          "جارية حاليا": 0, // الأولوية الأعلى
-          "لم تبدأ بعد": 1, // الأولوية المتوسطة
-          "انتهت": 2        // الأولوية الأقل
-        };
-
-        const statusA = statusOrder[a.status] ?? 3; // إذا كانت الحالة غير معروفة
-        const statusB = statusOrder[b.status] ?? 3;
-
-        if (statusA !== statusB) {
-          return statusA - statusB;
-        }
-
-        const timeA = moment(a.time, "HH:mm");
-        const timeB = moment(b.time, "HH:mm");
-        return timeA - timeB;
-      });
+   matches = matches.map(match => {
+    // تحديث الحالة بناءً على المصدر
+    const updatedMatch = updatedMatches.find(
+     m => m.team1 === match.team1 && m.team2 === match.team2
+    );
+    if (updatedMatch) {
+     match.status = updatedMatch.status; // تحديث الحالة فقط
     }
 
-    // قراءة القنوات من الملف
-    let channels = readDataFromFile("Sport.json");
-
-    if (!channels || channels.length === 0) {
-      await fetchChannels(); // جلب القنوات
-      channels = readDataFromFile("Sport.json"); // إعادة قراءة البيانات بعد الجلب
+    // تحديث الوقت بإنقاص ساعتين
+    if (match.time) {
+     const matchTime = moment(match.time, "HH:mm"); // افترض أن الوقت بصيغة HH:mm
+     match.time = matchTime.subtract(1, "hours").format("HH:mm");
     }
 
-    // تحديث روابط المباريات بناءً على القنوات
-    matches = matches.map(match => {
-      const matchingChannel = channels.find(channel => channel.name === match.moaalik);
-      match.link = matchingChannel ? matchingChannel.url : "رابط غير متوفر";
-      return match;
-    });
+    return match;
+   });
+  } else {
+   // إذا لم تكن هناك بيانات، يتم جلبها من المصدر
+   matches = await fetchMatches();
 
-    // تحديد إذا لم تكن هناك مباريات
-    const noMatches = matches.length === 0;
+   matches = matches.map(match => {
+    if (match.time) {
+     const matchTime = moment(match.time, "HH:mm");
+     match.time = matchTime.subtract(1, "hours").format("HH:mm");
+    }
+    return match;
+   });
 
-    // عرض الصفحة
-    res.render("index", { matches, channels, noMatches });
-  } catch (error) {
-    // التعامل مع الأخطاء وطباعة الرسالة
-    console.error("Error rendering homepage:", error.message);
-    res.status(500).send("حدث خطأ أثناء معالجة الطلب.");
+   // ترتيب المباريات حسب الحالة والوقت
+   matches.sort((a, b) => {
+    const statusOrder = {
+     "جارية حاليا": 0, // الأولوية الأعلى
+     "لم تبدأ بعد": 1, // الأولوية المتوسطة
+     "انتهت": 2        // الأولوية الأقل
+    };
+
+    const statusA = statusOrder[a.status] ?? 3; // إذا كانت الحالة غير معروفة
+    const statusB = statusOrder[b.status] ?? 3;
+
+    if (statusA !== statusB) {
+     return statusA - statusB;
+    }
+
+    const timeA = moment(a.time, "HH:mm");
+    const timeB = moment(b.time, "HH:mm");
+    return timeA - timeB;
+   });
   }
+
+  // قراءة القنوات من الملف
+  let channels = readDataFromFile("Sport.json");
+
+  if (!channels || channels.length === 0) {
+   await fetchChannels(); // جلب القنوات
+   channels = readDataFromFile("Sport.json"); // إعادة قراءة البيانات بعد الجلب
+  }
+
+  // تحديث روابط المباريات بناءً على القنوات
+  matches = matches.map(match => {
+   const matchingChannel = channels.find(channel => channel.name === match.moaalik);
+   match.link = matchingChannel ? matchingChannel.url : "رابط غير متوفر";
+   return match;
+  });
+
+  // تحديد إذا لم تكن هناك مباريات
+  const noMatches = matches.length === 0;
+
+  // عرض الصفحة
+  res.render("index", { matches, channels, noMatches });
+ } catch (error) {
+  // التعامل مع الأخطاء وطباعة الرسالة
+  console.error("Error rendering homepage:", error.message);
+  res.status(500).send("حدث خطأ أثناء معالجة الطلب.");
+ }
 });
 
 // صفحة التعديل
@@ -320,6 +320,10 @@ app.get("/menu", (req, res) => {
 
 app.get("/arab", (req, res) => {
  res.render("canalArab")
+})
+
+app.get("/maroc", (req, res) => {
+ res.render("maroc")
 })
 
 // إعادة جلب البيانات

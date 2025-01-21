@@ -1,0 +1,51 @@
+
+#EXTINF:-1 tvg-id="AlAoula.ma" tvg-logo="https://i.ibb.co/WcFBy41/oula.png"  ,Al Oula 
+http://195.154.179.49/Fj5vFhUq7V/mK7GUxVBPa/146|user-agent=1737329157?token=ei5vrk5hqvn&expires=1737329157
+
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://i.ibb.co/GQmw3nx/laayoune.png" ,Al Oula Laayoune 
+https://cdn-globecast.akamaized.net/live/eds/al_aoula_laayoune/hls_snrt/al_aoula_laayoune-avc1_1500000=5-mp4a_130400_qad=2.m3u8
+
+
+#EXTINF:-1 tvg-id="2MMonde.ma" tvg-logo="https://i.postimg.cc/1XYtmHXd/t-l-chargement-1.png" ,2M Maroc 
+http://195.154.179.49/Fj5vFhUq7V/mK7GUxVBPa/147|user-agent=1737329157?token=ei5vrk5hqvn&expires=1737329157
+
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://i.ibb.co/3rhwnSg/sport.png" ,Arriadia 
+http://195.154.179.49/Fj5vFhUq7V/mK7GUxVBPa/63|user-agent=1737329157?token=ei5vrk5hqvn&expires=1737329157
+
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://i.ibb.co/QmtWTRL/culture.png" ,Arrabiaa 
+http://195.154.179.49/Fj5vFhUq7V/mK7GUxVBPa/149|user-agent=1737329157?token=ei5vrk5hqvn&expires=1737329157
+
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://i.ibb.co/2PjWfqm/news.png" ,Al Maghribia 
+http://195.154.179.49/Fj5vFhUq7V/mK7GUxVBPa/150|user-agent=1737329157?token=ei5vrk5hqvn&expires=1737329157
+
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://i.ibb.co/sjfvWL2/m1.jpg" ,Medi1 
+http://streaming1.medi1tv.com/live/smil:medi1tv.smil/playlist.m3u8
+
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://i.ibb.co/KFRvWx7/telemaroc.png" ,Télé Maroc 
+https://api.new.livestream.com/accounts/27130247/events/8196478/live.m3u8
+
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://i.ibb.co/kQ2Srv7/m24.png" ,M24 وكالة المغرب العربي للأنباء
+https://63df3191463ce.streamlock.net/live/ngrp:Live2.stream_all/chunklist_w1880481615_b1396000.m3u8
+
+
+#EXTINF:-1 tvg-id="Med1.tv.Afrique.ma" tvg-logo="https://i.ibb.co/sjfvWL2/m1.jpg" ,Medi 1 Afrique
+https://streaming1.medi1tv.com/live/smil:medi1fr.smil/playlist.m3u8
+
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://i.ibb.co/wJrfbDy/chada.png" ,Chada TV  
+https://chadatv.vedge.infomaniak.com/livecast/chadatv/playlist.m3u8
+
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://i.postimg.cc/hvJrP2Mz/Assadissa.png" ,assadissa
+http://195.154.179.49/Fj5vFhUq7V/mK7GUxVBPa/151|user-agent=1737329157?token=ei5vrk5hqvn&expires=1737329157
+
+
+#EXTINF:-1 tvg-id="MBC 5 HD+" tvg-logo="https://i.postimg.cc/mrwVdztD/images.jpg" ,MBC 5
+http://195.154.179.49/Fj5vFhUq7V/mK7GUxVBPa/124|user-agent=1737329157?token=ei5vrk5hqvn&expires=1737329157
